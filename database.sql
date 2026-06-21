@@ -28,3 +28,17 @@ CREATE TABLE IF NOT EXISTS clientes (
     direccion VARCHAR(150) NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS motos (
+    id_moto INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    placa VARCHAR(10) NOT NULL UNIQUE,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    anio INT NOT NULL,
+    color VARCHAR(30) NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_motos_clientes FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);

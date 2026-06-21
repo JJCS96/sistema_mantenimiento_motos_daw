@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 validateClienteForm(form);
             }
 
+            if (form.classList.contains('moto-form')) {
+                validateMotoForm(form);
+            }
+
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -35,6 +39,40 @@ document.addEventListener('DOMContentLoaded', function () {
         if (correo) {
             var correoValido = emailPattern.test(correo.value.trim());
             correo.setCustomValidity(correoValido ? '' : 'Ingrese un correo valido.');
+        }
+    }
+
+    function validateMotoForm(form) {
+        var cliente = form.querySelector('[name="id_cliente"]');
+        var placa = form.querySelector('[name="placa"]');
+        var anio = form.querySelector('[name="anio"]');
+        var currentYear = new Date().getFullYear();
+
+        if (cliente) {
+            cliente.setCustomValidity(cliente.value.trim() === '' ? 'Seleccione un cliente.' : '');
+        }
+
+        if (placa) {
+            placa.setCustomValidity(placa.value.trim() === '' ? 'Ingrese la placa.' : '');
+        }
+
+        if (anio) {
+            var valor = anio.value.trim();
+            var numero = Number(valor);
+            var esNumeroValido = /^\d+$/.test(valor);
+            var error = '';
+
+            if (valor === '') {
+                error = 'Ingrese el anio.';
+            } else if (!esNumeroValido) {
+                error = 'El anio debe ser numerico.';
+            } else if (numero < 1990) {
+                error = 'El anio no puede ser menor a 1990.';
+            } else if (numero > currentYear) {
+                error = 'El anio no puede ser mayor al actual.';
+            }
+
+            anio.setCustomValidity(error);
         }
     }
 });

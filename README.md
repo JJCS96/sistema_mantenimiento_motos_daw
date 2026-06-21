@@ -4,7 +4,7 @@ Proyecto del segundo parcial de DAW desarrollado con PHP puro, MySQL, HTML, CSS,
 
 ## Estado actual
 
-FASE 2 completada: CRUD de clientes agregado.
+FASE 3 completada: CRUD de clientes y motos agregado.
 
 ## Tecnologias usadas
 
@@ -38,7 +38,8 @@ sistema_mantenimiento_motos_daw/
 - Proteccion de rutas internas
 - Dashboard inicial
 - CRUD completo de clientes
-- Modulos base para motos, repuestos, mantenimientos y reportes
+- CRUD completo de motos relacionado con clientes
+- Modulos base para repuestos, mantenimientos y reportes
 
 ## Requisitos
 
@@ -88,6 +89,16 @@ El sistema ya permite:
 - eliminar clientes
 - validar cedula, telefono y correo tanto en frontend como en backend
 
+## Modulo de motos
+
+El sistema ya permite:
+
+- listar motos con datos del cliente
+- registrar motos asociadas a un cliente
+- editar motos
+- eliminar motos
+- validar placa, cliente y anio tanto en frontend como en backend
+
 ## Descripcion breve del patron MVC
 
 - Modelo: gestiona acceso a datos.
@@ -96,4 +107,4 @@ El sistema ya permite:
 
 ## Siguiente etapa
 
-En la siguiente fase se desarrollara el CRUD de motos.
+En la siguiente fase se desarrollara el CRUD de repuestos.
