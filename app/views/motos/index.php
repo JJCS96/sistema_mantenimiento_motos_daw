@@ -8,14 +8,6 @@
     <a href="index.php?controller=moto&action=crear" class="btn btn-primary">Nueva moto</a>
 </div>
 
-<?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-<?php endif; ?>
-
-<?php if (!empty($error)): ?>
-    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-<?php endif; ?>
-
 <div class="card shadow-sm border-0">
     <div class="card-body">
         <div class="table-responsive">
@@ -44,10 +36,7 @@
                                 <td class="text-center">
                                     <div class="d-inline-flex gap-2">
                                         <a href="index.php?controller=moto&action=editar&id=<?= htmlspecialchars((string) $moto['id_moto']) ?>" class="btn btn-sm btn-warning">Editar</a>
-                                        <form method="POST" action="index.php?controller=moto&action=eliminar" onsubmit="return confirm('¿Desea eliminar esta moto?');">
-                                            <input type="hidden" name="id" value="<?= htmlspecialchars((string) $moto['id_moto']) ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                                        </form>
+                                        <a href="#" onclick="return confirmarEliminacion('index.php?controller=moto&action=eliminar&id=<?= htmlspecialchars((string) $moto['id_moto']) ?>');" class="btn btn-sm btn-danger">Eliminar</a>
                                     </div>
                                 </td>
                             </tr>

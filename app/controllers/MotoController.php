@@ -23,8 +23,6 @@ class MotoController extends BaseController
         $this->render('motos/index', [
             'title' => 'Motos',
             'motos' => $motos,
-            'success' => $_GET['success'] ?? '',
-            'error' => $_GET['error'] ?? '',
         ]);
     }
 
@@ -52,13 +50,16 @@ class MotoController extends BaseController
 
         if (!$this->clienteModel->obtenerPorId((int) $datos['id_cliente'])) {
             $errors['id_cliente'] = 'Cliente no valido.';
+            $this->setFlash('warning', 'Validacion', 'Cliente no valido.');
         }
 
         if ($this->motoModel->existePlaca($datos['placa'])) {
             $errors['placa'] = 'La placa ya esta registrada.';
+            $this->setFlash('warning', 'Validacion', 'La placa ya esta registrada.');
         }
 
         if (!empty($errors)) {
+            $this->setFlash('warning', 'Error de validacion', (string) reset($errors));
             $this->render('motos/crear', [
                 'title' => 'Nueva moto',
                 'errors' => $errors,
@@ -70,9 +71,11 @@ class MotoController extends BaseController
         }
 
         if ($this->motoModel->crear($datos)) {
-            $this->redirect('moto', 'index', ['success' => 'Moto registrada correctamente.']);
+            $this->setFlash('success', 'Correcto', 'Moto registrada correctamente.');
+            $this->redirect('moto', 'index');
         }
 
+        $this->setFlash('error', 'Error', 'Error al guardar la moto.');
         $this->render('motos/crear', [
             'title' => 'Nueva moto',
             'errors' => ['general' => 'Error al guardar la moto.'],
@@ -88,7 +91,8 @@ class MotoController extends BaseController
         $moto = $this->motoModel->obtenerPorId($id);
 
         if (!$moto) {
-            $this->redirect('moto', 'index', ['error' => 'La moto solicitada no existe.']);
+            $this->setFlash('error', 'No encontrada', 'La moto solicitada no existe.');
+            $this->redirect('moto', 'index');
         }
 
         $this->render('motos/editar', [
@@ -110,7 +114,8 @@ class MotoController extends BaseController
         $moto = $this->motoModel->obtenerPorId($id);
 
         if (!$moto) {
-            $this->redirect('moto', 'index', ['error' => 'No se puede editar una moto inexistente.']);
+            $this->setFlash('error', 'No encontrada', 'No se puede editar una moto inexistente.');
+            $this->redirect('moto', 'index');
         }
 
         $datos = $this->sanitizeFormData($_POST);
@@ -118,13 +123,16 @@ class MotoController extends BaseController
 
         if (!$this->clienteModel->obtenerPorId((int) $datos['id_cliente'])) {
             $errors['id_cliente'] = 'Cliente no valido.';
+            $this->setFlash('warning', 'Validacion', 'Cliente no valido.');
         }
 
         if ($this->motoModel->existePlaca($datos['placa'], $id)) {
             $errors['placa'] = 'La placa ya esta registrada.';
+            $this->setFlash('warning', 'Validacion', 'La placa ya esta registrada.');
         }
 
         if (!empty($errors)) {
+            $this->setFlash('warning', 'Error de validacion', (string) reset($errors));
             $moto = array_merge(['id_moto' => $id], $datos);
             $this->render('motos/editar', [
                 'title' => 'Editar moto',
@@ -137,10 +145,12 @@ class MotoController extends BaseController
         }
 
         if ($this->motoModel->actualizar($id, $datos)) {
-            $this->redirect('moto', 'index', ['success' => 'Moto actualizada correctamente.']);
+            $this->setFlash('success', 'Correcto', 'Moto actualizada correctamente.');
+            $this->redirect('moto', 'index');
         }
 
         $moto = array_merge(['id_moto' => $id], $datos);
+        $this->setFlash('error', 'Error', 'Error al actualizar la moto.');
         $this->render('motos/editar', [
             'title' => 'Editar moto',
             'errors' => ['general' => 'Error al actualizar la moto.'],
@@ -152,22 +162,25 @@ class MotoController extends BaseController
 
     public function eliminar(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if (!in_array($_SERVER['REQUEST_METHOD'], ['POST', 'GET'], true)) {
             $this->redirect('moto', 'index');
         }
 
-        $id = (int) ($_POST['id'] ?? 0);
+        $id = (int) ($_POST['id'] ?? $_GET['id'] ?? 0);
         $moto = $this->motoModel->obtenerPorId($id);
 
         if (!$moto) {
-            $this->redirect('moto', 'index', ['error' => 'No se puede eliminar una moto inexistente.']);
+            $this->setFlash('error', 'No encontrada', 'No se puede eliminar una moto inexistente.');
+            $this->redirect('moto', 'index');
         }
 
         if ($this->motoModel->eliminar($id)) {
-            $this->redirect('moto', 'index', ['success' => 'Moto eliminada correctamente.']);
+            $this->setFlash('success', 'Correcto', 'Moto eliminada correctamente.');
+            $this->redirect('moto', 'index');
         }
 
-        $this->redirect('moto', 'index', ['error' => 'Error al eliminar la moto.']);
+        $this->setFlash('error', 'Error', 'Error al eliminar la moto.');
+        $this->redirect('moto', 'index');
     }
 
     private function sanitizeFormData(array $input): array

@@ -7,10 +7,6 @@
                 <h1 class="h3 text-center mb-4">Iniciar sesion</h1>
                 <p class="text-muted text-center">Sistema web para gestion de mantenimiento de motos.</p>
 
-                <?php if (!empty($error)): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-                <?php endif; ?>
-
                 <form method="POST" action="index.php?controller=auth&action=login" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="correo" class="form-label">Correo</label>

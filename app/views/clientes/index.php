@@ -8,14 +8,6 @@
     <a href="index.php?controller=cliente&action=crear" class="btn btn-primary">Nuevo cliente</a>
 </div>
 
-<?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-<?php endif; ?>
-
-<?php if (!empty($error)): ?>
-    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-<?php endif; ?>
-
 <div class="card shadow-sm border-0">
     <div class="card-body">
         <div class="table-responsive">
@@ -44,10 +36,7 @@
                                 <td class="text-center">
                                     <div class="d-inline-flex gap-2">
                                         <a href="index.php?controller=cliente&action=editar&id=<?= htmlspecialchars((string) $cliente['id_cliente']) ?>" class="btn btn-sm btn-warning">Editar</a>
-                                        <form method="POST" action="index.php?controller=cliente&action=eliminar" onsubmit="return confirm('¿Desea eliminar este cliente?');">
-                                            <input type="hidden" name="id" value="<?= htmlspecialchars((string) $cliente['id_cliente']) ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                                        </form>
+                                        <a href="#" onclick="return confirmarEliminacion('index.php?controller=cliente&action=eliminar&id=<?= htmlspecialchars((string) $cliente['id_cliente']) ?>');" class="btn btn-sm btn-danger">Eliminar</a>
                                     </div>
                                 </td>
                             </tr>

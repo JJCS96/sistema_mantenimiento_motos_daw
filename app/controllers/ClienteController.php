@@ -20,8 +20,6 @@ class ClienteController extends BaseController
         $this->render('clientes/index', [
             'title' => 'Clientes',
             'clientes' => $clientes,
-            'success' => $_GET['success'] ?? '',
-            'error' => $_GET['error'] ?? '',
         ]);
     }
 
@@ -45,13 +43,16 @@ class ClienteController extends BaseController
 
         if ($this->clienteModel->existeCedula($datos['cedula'])) {
             $errors['cedula'] = 'La cedula ya esta registrada.';
+            $this->setFlash('warning', 'Validacion', 'La cedula ya esta registrada.');
         }
 
         if ($this->clienteModel->existeCorreo($datos['correo'])) {
             $errors['correo'] = 'El correo ya esta registrado.';
+            $this->setFlash('warning', 'Validacion', 'El correo ya esta registrado.');
         }
 
         if (!empty($errors)) {
+            $this->setFlash('warning', 'Error de validacion', (string) reset($errors));
             $this->render('clientes/crear', [
                 'title' => 'Nuevo cliente',
                 'errors' => $errors,
@@ -61,9 +62,11 @@ class ClienteController extends BaseController
         }
 
         if ($this->clienteModel->crear($datos)) {
-            $this->redirect('cliente', 'index', ['success' => 'Cliente registrado correctamente.']);
+            $this->setFlash('success', 'Correcto', 'Cliente registrado correctamente.');
+            $this->redirect('cliente', 'index');
         }
 
+        $this->setFlash('error', 'Error', 'Error al guardar el cliente.');
         $this->render('clientes/crear', [
             'title' => 'Nuevo cliente',
             'errors' => ['general' => 'Error al guardar el cliente.'],
@@ -77,7 +80,8 @@ class ClienteController extends BaseController
         $cliente = $this->clienteModel->obtenerPorId($id);
 
         if (!$cliente) {
-            $this->redirect('cliente', 'index', ['error' => 'El cliente solicitado no existe.']);
+            $this->setFlash('error', 'No encontrado', 'El cliente solicitado no existe.');
+            $this->redirect('cliente', 'index');
         }
 
         $this->render('clientes/editar', [
@@ -97,7 +101,8 @@ class ClienteController extends BaseController
         $cliente = $this->clienteModel->obtenerPorId($id);
 
         if (!$cliente) {
-            $this->redirect('cliente', 'index', ['error' => 'No se puede editar un cliente inexistente.']);
+            $this->setFlash('error', 'No encontrado', 'No se puede editar un cliente inexistente.');
+            $this->redirect('cliente', 'index');
         }
 
         $datos = $this->sanitizeFormData($_POST);
@@ -105,13 +110,16 @@ class ClienteController extends BaseController
 
         if ($this->clienteModel->existeCedula($datos['cedula'], $id)) {
             $errors['cedula'] = 'La cedula ya esta registrada.';
+            $this->setFlash('warning', 'Validacion', 'La cedula ya esta registrada.');
         }
 
         if ($this->clienteModel->existeCorreo($datos['correo'], $id)) {
             $errors['correo'] = 'El correo ya esta registrado.';
+            $this->setFlash('warning', 'Validacion', 'El correo ya esta registrado.');
         }
 
         if (!empty($errors)) {
+            $this->setFlash('warning', 'Error de validacion', (string) reset($errors));
             $cliente = array_merge(['id_cliente' => $id], $datos);
             $this->render('clientes/editar', [
                 'title' => 'Editar cliente',
@@ -122,10 +130,12 @@ class ClienteController extends BaseController
         }
 
         if ($this->clienteModel->actualizar($id, $datos)) {
-            $this->redirect('cliente', 'index', ['success' => 'Cliente actualizado correctamente.']);
+            $this->setFlash('success', 'Correcto', 'Cliente actualizado correctamente.');
+            $this->redirect('cliente', 'index');
         }
 
         $cliente = array_merge(['id_cliente' => $id], $datos);
+        $this->setFlash('error', 'Error', 'Error al actualizar el cliente.');
         $this->render('clientes/editar', [
             'title' => 'Editar cliente',
             'errors' => ['general' => 'Error al actualizar el cliente.'],
@@ -135,22 +145,25 @@ class ClienteController extends BaseController
 
     public function eliminar(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if (!in_array($_SERVER['REQUEST_METHOD'], ['POST', 'GET'], true)) {
             $this->redirect('cliente', 'index');
         }
 
-        $id = (int) ($_POST['id'] ?? 0);
+        $id = (int) ($_POST['id'] ?? $_GET['id'] ?? 0);
         $cliente = $this->clienteModel->obtenerPorId($id);
 
         if (!$cliente) {
-            $this->redirect('cliente', 'index', ['error' => 'No se puede eliminar un cliente inexistente.']);
+            $this->setFlash('error', 'No encontrado', 'No se puede eliminar un cliente inexistente.');
+            $this->redirect('cliente', 'index');
         }
 
         if ($this->clienteModel->eliminar($id)) {
-            $this->redirect('cliente', 'index', ['success' => 'Cliente eliminado correctamente.']);
+            $this->setFlash('success', 'Correcto', 'Cliente eliminado correctamente.');
+            $this->redirect('cliente', 'index');
         }
 
-        $this->redirect('cliente', 'index', ['error' => 'Error al eliminar el cliente.']);
+        $this->setFlash('error', 'Error', 'Error al eliminar el cliente.');
+        $this->redirect('cliente', 'index');
     }
 
     private function sanitizeFormData(array $input): array

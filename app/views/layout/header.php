@@ -1,4 +1,11 @@
 <?php
+if (!headers_sent()) {
+    // Evita reutilizar paginas protegidas desde la cache del navegador.
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
+}
+
 $title = $title ?? 'Sistema de Mantenimiento de Motos';
 $currentController = $_GET['controller'] ?? '';
 $usuarioSesion = $_SESSION['usuario'] ?? null;

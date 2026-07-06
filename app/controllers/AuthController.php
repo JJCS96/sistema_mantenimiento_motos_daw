@@ -11,7 +11,6 @@ class AuthController extends BaseController
             $this->redirect('dashboard', 'index');
         }
 
-        $error = $_GET['error'] ?? '';
         $correo = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,9 +18,9 @@ class AuthController extends BaseController
             $password = trim($_POST['password'] ?? '');
 
             if ($correo === '' || $password === '') {
-                $error = 'Complete todos los campos.';
+                $this->setFlash('warning', 'Validacion', 'Complete todos los campos.');
             } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-                $error = 'Ingrese un correo valido.';
+                $this->setFlash('warning', 'Validacion', 'Ingrese un correo valido.');
             } else {
                 $usuarioModel = new Usuario();
                 $usuario = $usuarioModel->findByCredentials($correo, $password);
@@ -37,22 +36,20 @@ class AuthController extends BaseController
                     $this->redirect('dashboard', 'index');
                 }
 
-                $error = 'Correo o contrasena incorrectos.';
+                $this->setFlash('error', 'Acceso denegado', 'Correo o contrasena incorrectos.');
             }
         }
 
         $this->render('auth/login', [
             'title' => 'Iniciar sesion',
-            'error' => $error,
             'correo' => $correo,
         ]);
     }
 
     public function logout(): void
     {
-        session_unset();
-        session_destroy();
-        header('Location: index.php?controller=auth&action=login');
-        exit;
+        unset($_SESSION['usuario']);
+        $this->setFlash('success', 'Sesion finalizada', 'Sesion cerrada correctamente.');
+        $this->redirect('auth', 'login');
     }
 }

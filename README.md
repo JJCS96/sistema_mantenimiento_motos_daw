@@ -1,22 +1,72 @@
-# Sistema Web para Gestion de Mantenimiento de Motos
+# Sistema Web de Gestión de Mantenimiento de Motos
 
-Proyecto del segundo parcial de DAW desarrollado con PHP puro, MySQL, HTML, CSS, JavaScript y estructura MVC.
+## Descripción general
 
-## Estado actual
+Este sistema permite gestionar la información principal de un taller de motos. Incluye administración de clientes, motos, repuestos, mantenimientos, detalle de repuestos usados y reportes básicos para apoyar el control del taller.
 
-FASE 3 completada: CRUD de clientes y motos agregado.
+## Objetivo
 
-## Tecnologias usadas
+Desarrollar una aplicación web en PHP y MySQL usando MVC, operaciones CRUD y validaciones para organizar la gestión de mantenimiento de motos de forma clara y funcional.
 
-- PHP puro
+## Tecnologías usadas
+
+- PHP
 - MySQL
-- PDO
-- HTML5
-- CSS3
+- HTML
+- CSS
 - JavaScript
-- Bootstrap 5
+- Bootstrap
+- SweetAlert2
+- PDO
+- XAMPP
 
-## Estructura MVC usada
+## Requisitos
+
+- XAMPP
+- PHP 8 o superior
+- MySQL o MariaDB
+- Navegador web
+
+## Instalación
+
+1. Copiar el proyecto en:
+
+```text
+C:\xampp\htdocs\sistema_mantenimiento_motos_daw
+```
+
+2. Encender Apache y MySQL en XAMPP.
+3. Importar `database.sql` desde phpMyAdmin.
+4. Revisar `config/database.php`.
+5. Abrir en el navegador:
+
+```text
+http://localhost/sistema_mantenimiento_motos_daw/public/
+```
+
+## Despliegue online
+
+- El proyecto puede subirse a un hosting PHP + MySQL.
+- Para la entrega se recomienda InfinityFree o un hosting similar.
+- Se debe crear una base MySQL en el hosting.
+- Se debe importar `database.sql`.
+- Se debe editar `config/database.php` con los datos reales del hosting.
+- Ver mas detalles en `DESPLIEGUE.md`.
+
+## Usuario de prueba
+
+- correo: `admin@gmail.com`
+- contraseña: `123456`
+
+Nota: por fines académicos la contraseña se mantiene simple. En un sistema real debe usarse `password_hash` y `password_verify`.
+
+## Estructura MVC
+
+- Modelo: gestiona la conexión y las consultas a la base de datos.
+- Vista: muestra formularios, tablas, botones y la interfaz del sistema.
+- Controlador: recibe acciones del usuario y coordina modelo y vista.
+
+Estructura general:
 
 ```text
 sistema_mantenimiento_motos_daw/
@@ -27,84 +77,134 @@ sistema_mantenimiento_motos_daw/
 ├── config/
 ├── public/
 ├── database.sql
-└── README.md
+├── README.md
+├── SUSTENTACION.md
+└── PRUEBAS_MANUALES.md
 ```
 
-## Que incluye esta fase
+## Funcionalidades principales
 
-- Front controller en `public/index.php`
-- Conexion a MySQL usando PDO
-- Login basico con sesion
-- Proteccion de rutas internas
-- Dashboard inicial
-- CRUD completo de clientes
-- CRUD completo de motos relacionado con clientes
-- Modulos base para repuestos, mantenimientos y reportes
+- Login
+- Dashboard
+- CRUD clientes
+- CRUD motos
+- CRUD repuestos
+- CRUD mantenimientos
+- Detalle de mantenimiento
+- Reportes
+- SweetAlert2
+- Validaciones
 
-## Requisitos
+## Base de datos
 
-- XAMPP o un entorno con Apache y MySQL
-- PHP 8 o superior
-- MySQL o MariaDB
+La base de datos principal es `segundo_parcial_daw_motos`.
 
-## Como ejecutar en XAMPP
+### Tablas principales
 
-1. Copie la carpeta `sistema_mantenimiento_motos_daw` dentro de `htdocs` o configure un virtual host.
-2. Inicie Apache y MySQL desde XAMPP.
-3. Cree la base de datos importando el archivo `database.sql`.
-4. Revise `config/database.php` y confirme que el usuario y la clave de MySQL sean correctos.
-5. Abra en el navegador la ruta del proyecto, por ejemplo:
+- `usuarios`
+- `clientes`
+- `motos`
+- `repuestos`
+- `mantenimientos`
+- `detalle_mantenimiento`
 
-```text
-http://localhost/sistema_mantenimiento_motos_daw/public/
-```
+### Relaciones
 
-Ruta oficial en XAMPP:
+- un cliente tiene varias motos
+- una moto tiene varios mantenimientos
+- un mantenimiento puede usar varios repuestos
+- los repuestos se descuentan del stock al usarse
 
-```text
-C:\xampp\htdocs\sistema_mantenimiento_motos_daw
-```
+## Validaciones
 
-## Como importar database.sql
+### Frontend
 
-1. Abra phpMyAdmin.
-2. Seleccione la opcion Importar.
-3. Elija el archivo `C:\xampp\htdocs\sistema_mantenimiento_motos_daw\database.sql`.
-4. Ejecute la importacion.
+- campos obligatorios
+- validaciones JavaScript
+- correos
+- fechas
+- cantidades
+- stock
+- precios
 
-## Usuario de prueba
+### Backend
 
-- Correo: `admin@gmail.com`
-- Contrasena: `123456`
+- campos vacíos
+- duplicados
+- relaciones existentes
+- datos numéricos
+- fechas
+- cantidades
+- stock
+- estados permitidos
 
-Nota: en un proyecto real la contrasena no debe guardarse en texto plano. Se debe usar `password_hash`.
+## Reportes
 
-## Modulo de clientes
+- por rango de fechas
+- por cliente
+- por estado
+- repuestos con bajo stock
 
-El sistema ya permite:
+## Dashboard
 
-- listar clientes
-- registrar clientes
-- editar clientes
-- eliminar clientes
-- validar cedula, telefono y correo tanto en frontend como en backend
+El dashboard muestra:
 
-## Modulo de motos
+- total de clientes
+- total de motos
+- total de repuestos
+- total de mantenimientos
+- mantenimientos pendientes, en proceso y finalizados
+- repuestos con bajo stock
+- total generado por mantenimientos
+- últimos 5 mantenimientos registrados
 
-El sistema ya permite:
+## Instrucciones de uso
 
-- listar motos con datos del cliente
-- registrar motos asociadas a un cliente
-- editar motos
-- eliminar motos
-- validar placa, cliente y anio tanto en frontend como en backend
+1. Iniciar sesión con el usuario de prueba.
+2. Registrar o revisar clientes.
+3. Registrar motos asociadas a clientes.
+4. Registrar repuestos.
+5. Registrar mantenimientos usando repuestos.
+6. Revisar el detalle del mantenimiento.
+7. Consultar métricas en el dashboard.
+8. Consultar reportes.
 
-## Descripcion breve del patron MVC
+## Sustentación
 
-- Modelo: gestiona acceso a datos.
-- Vista: muestra la interfaz al usuario.
-- Controlador: recibe la peticion y coordina modelo y vista.
+Puntos recomendados para explicar:
 
-## Siguiente etapa
+- problema que resuelve el sistema
+- estructura del proyecto
+- funcionamiento del CRUD
+- conexión segura con PDO
+- patrón MVC
+- validaciones frontend y backend
+- demostración práctica del sistema
 
-En la siguiente fase se desarrollara el CRUD de repuestos.
+Para apoyar la exposición se incluyen también:
+
+- `SUSTENTACION.md`
+- `PRUEBAS_MANUALES.md`
+
+## Datos de prueba incluidos
+
+El archivo `database.sql` incluye:
+
+- usuario administrador
+- 2 clientes
+- 2 motos
+- 3 repuestos
+- 1 mantenimiento de ejemplo
+- detalles de repuestos usados
+
+## Integrantes
+
+Espacio para completar con los nombres del grupo:
+
+- Integrante 1: ____________________
+- Integrante 2: ____________________
+- Integrante 3: ____________________
+
+## Estado final del proyecto
+
+Proyecto preparado para entrega académica, ejecución local en XAMPP y sustentación.

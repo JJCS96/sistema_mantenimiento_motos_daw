@@ -102,4 +102,13 @@ class Moto
 
         return $statement->fetchAll();
     }
+
+    public function contarTodos(): int
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM motos';
+        $statement = $this->connection->query($sql);
+        $row = $statement->fetch();
+
+        return (int) ($row['total'] ?? 0);
+    }
 }

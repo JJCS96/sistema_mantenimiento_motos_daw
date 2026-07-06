@@ -19,12 +19,20 @@ class BaseController
         exit;
     }
 
+    protected function setFlash(string $type, string $title, string $text): void
+    {
+        $_SESSION['mensaje'] = [
+            'tipo' => $type,
+            'titulo' => $title,
+            'texto' => $text,
+        ];
+    }
+
     protected function requireAuth(): void
     {
         if (!isset($_SESSION['usuario'])) {
-            $this->redirect('auth', 'login', [
-                'error' => 'Debe iniciar sesion para continuar.',
-            ]);
+            $this->setFlash('warning', 'Acceso restringido', 'Debe iniciar sesion para continuar.');
+            $this->redirect('auth', 'login');
         }
     }
 }

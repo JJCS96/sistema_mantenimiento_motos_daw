@@ -10,10 +10,14 @@ class Database
             return self::$connection;
         }
 
-        $host = 'localhost';
-        $database = 'segundo_parcial_daw_motos';
-        $username = 'root';
-        $password = '1234';
+        // Configuracion local XAMPP.
+        // Para InfinityFree o un hosting similar, reemplace estos datos
+        // por los valores entregados en el panel del hosting:
+        // host, nombre de base de datos, usuario y contrasena.
+        $host = 'sql301.infinityfree.com';
+        $database = 'if0_42345354_segundo_parcial_daw_motos';
+        $username = 'if0_42345354';
+        $password = 'B4RC3L0Na16';
         $charset = 'utf8mb4';
         $dsn = "mysql:host={$host};dbname={$database};charset={$charset}";
 

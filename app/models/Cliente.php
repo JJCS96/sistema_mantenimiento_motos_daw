@@ -110,4 +110,13 @@ class Cliente
 
         return (bool) $statement->fetch();
     }
+
+    public function contarTodos(): int
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM clientes';
+        $statement = $this->connection->query($sql);
+        $row = $statement->fetch();
+
+        return (int) ($row['total'] ?? 0);
+    }
 }
